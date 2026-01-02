@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<style>
+body { font-family: Arial; background: #f4f6f8; padding: 20px; }
+button { padding: 8px 14px; margin: 5px; cursor: pointer; }
+.active { background: green; color: white; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+th { background: #e8f5e9; }
+img { border-radius: 50%; object-fit: cover; }
+</style>
+</head>
+
+<body>
+
+<h2>Admin Dashboard</h2>
+
+<button class="tab-button active" data-type="pending">Pending Doctors</button>
+<button class="tab-button" data-type="approved">Approved Doctors</button>
+<button class="tab-button" data-type="rejected">Rejected Doctors</button>
+
+<table>
+<thead>
+<tr>
+  <th>Email</th>
+  <th>Name</th>
+  <th>Reg No</th>
+  <th>Specialization</th>
+  <th>Certificate</th>
+  <th>Photo</th>
+  <th>Action</th>
+</tr>
+</thead>
+<tbody id="tableBody">
+<tr><td colspan="7">Loading...</td></tr>
+</tbody>
+</table>
+
+<script>
+const BASE_URL = "http://localhost:5000/api/admin";
+
+let currentTab = "pending";
+const tableBody = document.getElementById("tableBody");
+
+// ================= STORE DATA =================
+let doctorsData = {
+  pending: [],
+  approved: [],
+  rejected: []
+};
+
+// ================= RENDER TABLE =================
+function renderTable(type) {
+  const doctors = doctorsData[type] || [];
+  tableBody.innerHTML = "";
+
+  if (doctors.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="7">No records</td></tr>`;
+    return;
+  }
+
+  doctors.forEach(d => {
+    const row = document.createElement("tr");
+    row.setAttribute("data-id", d._id);
+
+    const certificates = d.degreeCertificates && d.degreeCertificates.length
+      ? d.degreeCertificates
+          .map((file, i) =>
+            `<a href="http://localhost:5000/${file}" target="_blank">View ${i + 1}</a>`
+          )
+          .join("<br>")
+      : "—";
+
+    const photo = d.professionalPhoto
+      ? `<img src="http://localhost:5000/${d.professionalPhoto}" width="50" height="50">`
+      : "—";
+
+    row.innerHTML = `
+      <td>${d.email}</td>
+      <td>${d.firstName} ${d.lastName}</td>
+      <td>${d.registrationNumber}</td>
+      <td>${d.specialization}</td>
+      <td>${certificates}</td>
+      <td>${photo}</td>
+      <td>
+        ${type === "pending" ? `
+          <button onclick="approve('${d._id}')">Approve</button>
+          <button onclick="reject('${d._id}')">Reject</button>
+        ` : "-"}
+      </td>
+    `;
+
+    tableBody.appendChild(row);
+  });
+}
+
+// ================= LOAD DOCTORS =================
+async function loadDoctors(type) {
+  try {
+    const res = await fetch(`${BASE_URL}/${type}-doctors`);
+    const data = await res.json();
+    doctorsData[type] = data;
+    if (currentTab === type) renderTable(type);
+  } catch (err) {
+    showError();
+  }
+}
+
+// ================= APPROVE / REJECT =================
+async function approve(id) {
+  try {
+    await fetch(`${BASE_URL}/approve-doctor`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ doctorId: id })
+    }).then(r => r.json());
+
+    alert("✅ Doctor Approved & email sent");
+
+    const index = doctorsData.pending.findIndex(d => d._id === id);
+    if (index !== -1) {
+      const doctor = doctorsData.pending.splice(index, 1)[0];
+      doctorsData.approved.unshift(doctor);
+    }
+
+    renderTable(currentTab);
+  } catch (err) {
+    alert("❌ Error approving doctor");
+  }
+}
+
+async function reject(id) {
+  const reason = prompt("Reason?");
+  if (!reason) return;
+
+  try {
+    await fetch(`${BASE_URL}/reject-doctor`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ doctorId: id, reason })
+    }).then(r => r.json());
+
+    alert("❌ Doctor Rejected");
+
+    const index = doctorsData.pending.findIndex(d => d._id === id);
+    if (index !== -1) {
+      const doctor = doctorsData.pending.splice(index, 1)[0];
+      doctor.rejectionReason = reason;
+      doctorsData.rejected.unshift(doctor);
+    }
+
+    renderTable(currentTab);
+  } catch (err) {
+    alert("❌ Error rejecting doctor");
+  }
+}
+
+// ================= TAB BUTTONS =================
+function activateTab(type, button) {
+  currentTab = type;
+  renderTable(type);
+  document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+  button.classList.add("active");
+}
+
+// ================= ERROR HANDLER =================
+function showError() {
+  tableBody.innerHTML = `<tr><td colspan="7">Error loading data</td></tr>`;
+}
+
+// ================= INITIAL LOAD =================
+document.querySelectorAll(".tab-button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const type = btn.getAttribute("data-type");
+    activateTab(type, btn);
+  });
+});
+
+["pending", "approved", "rejected"].forEach(type => loadDoctors(type));
+activateTab("pending", document.querySelector(".tab-button[data-type='pending']"));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medical History</title>
+<link rel="stylesheet" href="consult.css">
+<style>
+.form-buttons{display:flex;justify-content:space-between;margin-top:20px;}
+.btn-prev{padding:12px 24px;background:#e5e7eb;border:none;border-radius:6px;font-weight:600;cursor:pointer;}
+.btn-next{padding:12px 24px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;}
+.inline-options label{margin-right:16px;}
+.hidden{display:none;}
+.error{color:red;font-size:12px;}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+<div class="page-title">Patient Registration</div>
+
+<div class="tabs">
+  <div class="tab">Personal Information</div>
+  <div class="tab">Lifestyle & Social History</div>
+  <div class="tab active">Medical History</div>
+  <div class="tab">Current Health Status</div>
+  <div class="tab">Psychometric Assessment</div>
+  <div class="tab">AYUSH Profile</div>
+  <div class="tab">Image Capture</div>
+</div>
+
+<div class="form-card">
+<div class="form-title">Medical History</div>
+<div class="form-subtext">Please fill required details</div>
+
+<div class="form-grid">
+<div class="full">
+  <label>Past Medical Conditions *</label>
+  <div class="inline-options">
+    <label><input type="checkbox" class="pastConditions" value="Diabetes"> Diabetes</label>
+    <label><input type="checkbox" class="pastConditions" value="Hypertension"> Hypertension</label>
+    <label><input type="checkbox" class="pastConditions" value="Heart Disease"> Heart Disease</label>
+    <label><input type="checkbox" class="pastConditions" value="Asthma"> Asthma</label>
+    <label><input type="checkbox" id="pastOther" value="Others"> Others</label>
+  </div>
+</div>
+
+<div class="full hidden" id="pastOtherBox">
+  <textarea id="pastConditionsDetails" placeholder="Specify other conditions"></textarea>
+</div>
+
+<div class="full"><label>Current Medications *</label><textarea id="currentMedications"></textarea></div>
+<div class="full"><label>Past Surgeries *</label><textarea id="pastSurgeries"></textarea></div>
+<div class="full"><label>Food Allergies *</label><textarea id="foodAllergies"></textarea></div>
+<div class="full"><label>Drug Allergies *</label><textarea id="drugAllergies"></textarea></div>
+<div class="full"><label>Environmental Allergies *</label><textarea id="environmentAllergies"></textarea></div>
+
+<div class="full">
+  <label>Family History *</label>
+  <div class="inline-options">
+    <label><input type="checkbox" class="familyHistory" value="Cardiac Disease"> Cardiac Disease</label>
+    <label><input type="checkbox" class="familyHistory" value="Diabetes"> Diabetes</label>
+    <label><input type="checkbox" class="familyHistory" value="Cancer"> Cancer</label>
+    <label><input type="checkbox" class="familyHistory" value="Genetic Disorders"> Genetic Disorders</label>
+  </div>
+</div>
+<div class="full"><textarea id="familyHistoryDetails" placeholder="Family history details"></textarea></div>
+
+</div>
+
+<div class="form-buttons">
+  <button class="btn-prev" onclick="location.href='consult2.html'">← Previous</button>
+  <button class="btn-next" onclick="saveStep3()">Save & Next →</button>
+</div>
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api/patients";
+
+/* SHOW / HIDE OTHER CONDITIONS */
+const pastOther = document.getElementById("pastOther");
+const pastOtherBox = document.getElementById("pastOtherBox");
+
+pastOther.addEventListener("change", () => {
+  pastOtherBox.classList.toggle("hidden", !pastOther.checked);
+});
+
+/* LOAD STEP 3 */
+window.onload = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}`);
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (!data.step3) return;
+
+    const s = data.step3;
+
+    (s.pastConditions || []).forEach(v => {
+      document.querySelectorAll(".pastConditions").forEach(cb => {
+        if (cb.value === v) cb.checked = true;
+      });
+      if (v === "Others") {
+        pastOther.checked = true;
+        pastOtherBox.classList.remove("hidden");
+      }
+    });
+
+    pastConditionsDetails.value = s.pastConditionsDetails || "";
+    currentMedications.value = s.currentMedications || "";
+    pastSurgeries.value = s.pastSurgeries || "";
+
+    foodAllergies.value = s.allergies?.food || "";
+    drugAllergies.value = s.allergies?.drug || "";
+    environmentAllergies.value = s.allergies?.environmental || "";
+
+    (s.familyHistory || []).forEach(v => {
+      document.querySelectorAll(".familyHistory").forEach(cb => {
+        if (cb.value === v) cb.checked = true;
+      });
+    });
+
+    familyHistoryDetails.value = s.familyHistoryDetails || "";
+  } catch (err) {
+    console.error("Load error:", err);
+  }
+};
+
+/* SAVE STEP 3 */
+async function saveStep3() {
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) {
+    alert("Patient not found");
+    return;
+  }
+
+  const pastConditions = Array.from(
+    document.querySelectorAll(".pastConditions:checked")
+  ).map(i => i.value);
+
+  if (pastOther.checked && !pastConditions.includes("Others")) {
+    pastConditions.push("Others");
+  }
+
+  const step3 = {
+    pastConditions,
+    pastConditionsDetails: pastConditionsDetails.value,
+    currentMedications: currentMedications.value,
+    pastSurgeries: pastSurgeries.value,
+    allergies: {
+      food: foodAllergies.value,
+      drug: drugAllergies.value,
+      environmental: environmentAllergies.value
+    },
+    familyHistory: Array.from(
+      document.querySelectorAll(".familyHistory:checked")
+    ).map(i => i.value),
+    familyHistoryDetails: familyHistoryDetails.value
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}/step3`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ step3 })
+    });
+
+    if (!res.ok) throw new Error("Failed to save step3");
+
+    location.href = "consult4.html";
+  } catch (err) {
+    alert("Server error");
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>

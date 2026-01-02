@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Current Health Status</title>
+
+<link rel="stylesheet" href="consult.css">
+
+<style>
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 22px;
+}
+.grid-1 { margin-bottom: 22px; }
+.section-title { font-size: 16px; font-weight: 600; margin: 28px 0 14px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 22px; }
+input:disabled { background: #f4f6f8; color: #888; }
+.error { color: red; font-size: 12px; margin-top: 6px; display: block; }
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.btn-prev {
+  padding: 12px 24px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-next {
+  padding: 12px 24px;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-next:hover { background: #15803d; }
+</style>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <div class="page-title">Patient Registration</div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active">Personal Information</div>
+    <div class="tab active">Lifestyle & Social History</div>
+    <div class="tab active">Medical History</div>
+    <div class="tab active">Current Health Status</div>
+    <div class="tab">Psychometric Assessment</div>
+    <div class="tab">AYUSH Profile</div>
+    <div class="tab">Image Capture</div>
+  </div>
+
+  <div class="form-card">
+    <h3>Current Health Status</h3>
+    <p class="subtitle">Please fill all required fields</p>
+
+    <!-- Vitals -->
+    <div class="grid-3">
+      <div>
+        <label>Height (cm) *</label>
+        <input type="number" id="height">
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <label>Weight (kg) *</label>
+        <input type="number" id="weight">
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <label>BMI</label>
+        <input type="text" id="bmi" disabled>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div>
+        <label>Blood Pressure</label>
+        <input type="text" id="bloodPressure">
+      </div>
+      <div>
+        <label>Pulse Rate</label>
+        <input type="text" id="pulseRate">
+      </div>
+      <div>
+        <label>Temperature</label>
+        <input type="text" id="temperature">
+      </div>
+    </div>
+
+    <div class="grid-1">
+      <label>Present Symptoms</label>
+      <textarea id="symptoms"></textarea>
+    </div>
+
+    <div class="grid-1">
+      <label>Pain Areas / Physical Discomfort</label>
+      <textarea id="painAreas"></textarea>
+    </div>
+
+    <div class="grid-1">
+      <label>Menstrual / Reproductive Health</label>
+      <textarea id="reproductiveHealth"></textarea>
+    </div>
+
+    <div class="section-title">Mental Health Status</div>
+
+    <div class="grid-3">
+      <div>
+        <select id="stressLevel">
+          <option value="">Stress Level *</option>
+          <option>Low</option>
+          <option>Moderate</option>
+          <option>High</option>
+        </select>
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <select id="depressionLevel">
+          <option value="">Depression *</option>
+          <option>None</option>
+          <option>Mild</option>
+          <option>Moderate</option>
+        </select>
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <select id="anxietyLevel">
+          <option value="">Anxiety *</option>
+          <option>None</option>
+          <option>Mild</option>
+          <option>Moderate</option>
+        </select>
+        <small class="error"></small>
+      </div>
+    </div>
+
+    <div class="form-buttons">
+      <button class="btn-prev" id="prevBtn">← Previous</button>
+      <button class="btn-next" id="nextBtn">Save & Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api/patients";
+
+/* BMI calculation */
+function calcBMI(){
+  if(height.value && weight.value){
+    bmi.value = (weight.value / ((height.value/100) ** 2)).toFixed(1);
+  }
+}
+height.oninput = calcBMI;
+weight.oninput = calcBMI;
+
+/* LOAD STEP 4 */
+window.onload = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}`);
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (!data.step4) return;
+
+    const s = data.step4;
+
+    height.value = s.vitals?.height || "";
+    weight.value = s.vitals?.weight || "";
+    bmi.value = s.vitals?.bmi || "";
+    bloodPressure.value = s.vitals?.bloodPressure || "";
+    pulseRate.value = s.vitals?.pulseRate || "";
+    temperature.value = s.vitals?.temperature || "";
+    symptoms.value = s.symptoms || "";
+    painAreas.value = s.painAreas || "";
+    reproductiveHealth.value = s.reproductiveHealth || "";
+    stressLevel.value = s.mentalHealth?.stress || "";
+    depressionLevel.value = s.mentalHealth?.depression || "";
+    anxietyLevel.value = s.mentalHealth?.anxiety || "";
+
+    calcBMI();
+  } catch (err) {
+    console.error("Load error:", err);
+  }
+};
+
+/* VALIDATION */
+function validate(){
+  let ok = true;
+  document.querySelectorAll(".error").forEach(e => e.textContent = "");
+
+  if(!height.value){ height.nextElementSibling.textContent = "Required"; ok=false; }
+  if(!weight.value){ weight.nextElementSibling.textContent = "Required"; ok=false; }
+  if(!stressLevel.value){ stressLevel.nextElementSibling.textContent = "Required"; ok=false; }
+  if(!depressionLevel.value){ depressionLevel.nextElementSibling.textContent = "Required"; ok=false; }
+  if(!anxietyLevel.value){ anxietyLevel.nextElementSibling.textContent = "Required"; ok=false; }
+
+  return ok;
+}
+
+/* SAVE STEP 4 */
+nextBtn.onclick = async () => {
+  if (!validate()) return;
+
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) {
+    alert("Patient not found");
+    return;
+  }
+
+  const step4 = {
+    vitals: {
+      height: height.value,
+      weight: weight.value,
+      bmi: bmi.value,
+      bloodPressure: bloodPressure.value,
+      pulseRate: pulseRate.value,
+      temperature: temperature.value
+    },
+    symptoms: symptoms.value,
+    painAreas: painAreas.value,
+    reproductiveHealth: reproductiveHealth.value,
+    mentalHealth: {
+      stress: stressLevel.value,
+      depression: depressionLevel.value,
+      anxiety: anxietyLevel.value
+    }
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}/step4`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ step4 })
+    });
+
+    if (!res.ok) throw new Error("Failed to save step4");
+
+    location.href = "consult5.html";
+  } catch (err) {
+    alert("Server error");
+    console.error(err);
+  }
+};
+
+prevBtn.onclick = () => location.href = "consult3.html";
+</script>
+
+</body>
+</html>

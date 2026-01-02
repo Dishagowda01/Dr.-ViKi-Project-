@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Wellness Summary</title>
+
+  <style>
+    /* ===== General Reset ===== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eef2f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* ===== Card Container ===== */
+    .card {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      text-align: left;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #2e7d32;
+      box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2e7d32;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #1b4d1b;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    /* ===== Responsive ===== */
+    @media(max-width: 480px) {
+      .card {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Generate AI Wellness Summary</h2>
+
+    <label for="patientSelect">Select Patient:</label>
+    <select id="patientSelect">
+      <option value="">-- Select Patient --</option>
+    </select>
+
+    <button id="generateBtn">Generate PDF</button>
+  </div>
+
+  <script>
+    // -------- Load Patients --------
+    async function loadPatients() {
+      try {
+        const res = await fetch("/api/patients");
+        if (!res.ok) throw new Error("Failed to load patients");
+
+        const patients = await res.json();
+        const select = document.getElementById("patientSelect");
+
+        // clear existing options
+        select.innerHTML = '<option value="">-- Select Patient --</option>';
+
+        patients.forEach(patient => {
+          const option = document.createElement("option");
+          option.value = patient._id;
+          option.textContent =
+            patient.step1?.fullName || "Unnamed Patient";
+          select.appendChild(option);
+        });
+      } catch (err) {
+        console.error("Error loading patients:", err);
+        alert("Unable to load patient list");
+      }
+    }
+
+    loadPatients();
+
+    // -------- Generate PDF --------
+    document.getElementById("generateBtn").addEventListener("click", () => {
+      const patientId = document.getElementById("patientSelect").value;
+
+      if (!patientId) {
+        alert("Please select a patient!");
+        return;
+      }
+
+      window.open(`/ai-summary/${patientId}`, "_blank");
+    });
+  </script>
+
+</body>
+</html>

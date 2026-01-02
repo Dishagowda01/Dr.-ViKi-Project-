@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Psychometric Assessment</title>
+<link rel="stylesheet" href="consult.css"/>
+
+<style>
+body{ background:#f4f8fb; font-family: Arial, sans-serif; }
+.page-wrapper{ max-width:1100px; margin:auto; padding:20px; }
+.page-title{ text-align:center; font-size:22px; font-weight:600; margin-bottom:20px; }
+.tabs{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:25px; }
+.tab{ padding:8px 14px; border-radius:20px; background:#e5e5e5; font-size:13px; }
+.tab.active{ background:#2e7d32; color:#fff; }
+
+.form-card{ background:#fff; border-radius:14px; padding:30px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+.subtitle{ color:#666; margin-top:6px; }
+.scale-info{ font-size:13px; color:#777; margin:12px 0 20px; }
+
+.question{
+  display:flex; justify-content:space-between; align-items:center;
+  border-radius:12px; padding:16px 20px; margin-bottom:14px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+.q-left{ max-width:70%; }
+.q-meta{ margin-bottom:6px; }
+.badge{ border:1px solid #ccc; padding:2px 10px; border-radius:12px; font-size:12px; }
+.q-text{ font-size:14px; color:#444; margin:0; }
+.scale{ display:flex; gap:18px; }
+.scale label{ font-size:12px; cursor:pointer; }
+
+.form-buttons{ display:flex; justify-content:space-between; margin-top:30px; }
+.btn-prev,.btn-next{ border:none; padding:10px 22px; border-radius:22px; cursor:pointer; }
+.btn-prev{ background:#e0e0e0; }
+.btn-next{ background:#2e7d32; color:#fff; }
+
+.scoring-card{
+  background:#fff; border-radius:10px; padding:18px 22px;
+  margin-top:30px; box-shadow:0 4px 14px rgba(0,0,0,0.08);
+}
+.score-item{ display:flex; align-items:center; font-size:13px; margin-bottom:8px; }
+.dot{ width:9px; height:9px; border-radius:50%; margin-right:10px; }
+.dot.low{ background:#22c55e; }
+.dot.mild{ background:#eab308; }
+.dot.moderate{ background:#f97316; }
+.dot.high{ background:#ef4444; }
+</style>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <div class="page-title">Patient Registration</div>
+
+  <div class="tabs">
+    <div class="tab active">Personal Information</div>
+    <div class="tab active">Lifestyle & Social History</div>
+    <div class="tab active">Medical History</div>
+    <div class="tab active">Current Health Status</div>
+    <div class="tab active">Psychometric Assessment</div>
+    <div class="tab">AYUSH Profile</div>
+    <div class="tab">Image Capture</div>
+  </div>
+
+  <div class="form-card">
+    <h3>Psychometric Assessment</h3>
+    <p class="subtitle">Rate how you felt during the past week</p>
+    <p class="scale-info">1 = Never • 2 = Rarely • 3 = Sometimes • 4 = Often • 5 = Always</p>
+
+    <div id="questions"></div>
+
+    <div class="scoring-card">
+      <div class="score-item"><span class="dot low"></span>Low (24–48)</div>
+      <div class="score-item"><span class="dot mild"></span>Mild (49–72)</div>
+      <div class="score-item"><span class="dot moderate"></span>Moderate (73–96)</div>
+      <div class="score-item"><span class="dot high"></span>High (97–120)</div>
+    </div>
+
+    <div class="form-buttons">
+      <button class="btn-prev" id="prevBtn">← Previous</button>
+      <button class="btn-next" id="nextBtn">Save & Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api/patients";
+
+const questions = [
+  "I felt that I was under pressure.",
+  "I found it hard to relax.",
+  "I felt overwhelmed by responsibilities.",
+  "I had trouble sleeping due to thoughts.",
+  "Small problems felt big.",
+  "I felt easily irritated.",
+  "I felt like shouting.",
+  "I held grudges.",
+  "I felt physically tense.",
+  "I struggled to control temper.",
+  "I felt cheerful.",
+  "I felt sad.",
+  "I had mood swings.",
+  "I felt motivated.",
+  "I withdrew socially.",
+  "I get annoyed easily.",
+  "I feel restless.",
+  "I snap at people.",
+  "I feel nervous.",
+  "I avoid anxious situations.",
+  "I experience panic.",
+  "I feel like crying.",
+  "I cry easily.",
+  "I feel emotionally overwhelmed."
+];
+
+const container = document.getElementById("questions");
+
+/* Render questions */
+questions.forEach((q,i)=>{
+  container.innerHTML += `
+  <div class="question">
+    <div class="q-left">
+      <div class="q-meta"><span class="badge">Q${i+1}</span></div>
+      <p class="q-text">${q}</p>
+    </div>
+    <div class="scale">
+      ${[1,2,3,4,5].map(v=>`
+        <label><input type="radio" name="q${i+1}" value="${v}"> ${v}</label>
+      `).join("")}
+    </div>
+  </div>`;
+});
+
+/* LOAD STEP 5 */
+window.onload = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}`);
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (!data.step5 || !data.step5.responses) return;
+
+    Object.entries(data.step5.responses).forEach(([k,v])=>{
+      const el = document.querySelector(`input[name="${k}"][value="${v}"]`);
+      if (el) el.checked = true;
+    });
+  } catch (err) {
+    console.error("Load error:", err);
+  }
+};
+
+function go(p){ location.href=p; }
+
+/* SAVE STEP 5 */
+nextBtn.onclick = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) { alert("Patient not found"); return; }
+
+  let responses = {}, total = 0;
+
+  for (let i = 1; i <= 24; i++) {
+    const s = document.querySelector(`input[name="q${i}"]:checked`);
+    if (!s) { alert("Please answer all questions"); return; }
+    responses["q"+i] = Number(s.value);
+    total += Number(s.value);
+  }
+
+  const interpretation =
+    total <= 48 ? "Low" :
+    total <= 72 ? "Mild" :
+    total <= 96 ? "Moderate" : "High";
+
+  const step5 = { responses, totalScore: total, interpretation };
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}/step5`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ step5 })
+    });
+
+    if (!res.ok) throw new Error("Failed to save step5");
+    go("consult6.html");
+  } catch (err) {
+    alert("Server error");
+    console.error(err);
+  }
+};
+
+/* PREVIOUS */
+prevBtn.onclick = () => go("consult4.html");
+</script>
+
+</body>
+</html>

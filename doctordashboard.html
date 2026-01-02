@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", sans-serif;
+}
+
+body{
+  background:#eef6fb;
+}
+
+/* ================= HEADER ================= */
+.header{
+  padding:16px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.left-icons{
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+
+.left-icons img{
+  width:26px;
+  height:26px;
+  cursor:pointer;
+}
+
+.right-logo img{
+  height:34px;
+}
+
+/* ================= LAYOUT ================= */
+.dashboard{
+  display:flex;
+  gap:20px;
+  padding:20px 30px;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+  width:220px;
+  background:#ffffff;
+  border-radius:10px;
+  padding:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.sidebar ul{
+  list-style:none;
+}
+
+.sidebar li a{
+  display:block;
+  padding:10px;
+  font-size:14px;
+  border-radius:6px;
+  text-decoration:none;
+  color:#333;
+  margin-bottom:6px;
+}
+
+.sidebar li a.active,
+.sidebar li a:hover{
+  background:#607d8b;
+  color:#fff;
+}
+
+/* ================= CENTER ================= */
+.center{
+  flex:1;
+}
+
+.card{
+  background:#ffffff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.no-data{
+  margin-top:10px;
+  font-size:14px;
+  color:#777;
+}
+
+/* ================= RIGHT ================= */
+.right{
+  width:260px;
+}
+
+.quick-actions button{
+  width:100%;
+  padding:10px;
+  margin-top:12px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  background:#ffffff;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.quick-actions button:hover{
+  background:#0b7d85;
+  color:#ffffff;
+  border-color:#0b7d85;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:900px){
+  .dashboard{
+    flex-direction:column;
+  }
+  .sidebar,
+  .right{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+
+  <!-- LEFT : LOGO -->
+  <div class="right-logo">
+    <img src="images/logo.jpeg" alt="Logo">
+  </div>
+
+  <!-- RIGHT : ICONS -->
+  <div class="left-icons">
+    <a href="notifications.html">
+      <img src="images/bell.png" class="icon-outline" alt="Notifications">
+    </a>
+    <a href="doctorprofile.html">
+      <img src="images/profile.png" class="icon-outline" alt="Profile">
+    </a>
+  </div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="doctordashboard.html" class="active">Dashboard</a></li>
+      <li><a href="aireports.html">AI Reports</a></li>
+    </ul>
+  </div>
+
+  <!-- CENTER (DATA COMES FROM PATIENT DASHBOARD LATER) -->
+  <div class="center">
+    <div class="card">
+      <h4>Dashboard</h4>
+      <p class="no-data">Patient data will appear here once patients submit details.</p>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="card quick-actions">
+      <h4>Quick Actions</h4>
+      <button onclick="location.href='startconsultation.html'">Start Consultation</button>
+      <button onclick="location.href='appointments.html'">Add New Appointment</button>
+      <button onclick="location.href='patients.html'">View Patient Record</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

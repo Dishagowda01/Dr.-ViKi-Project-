@@ -1,0 +1,299 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+    background: #eef6fb;
+    color: #1a1a1a;
+}
+
+/* PAGE WRAPPER */
+.page-wrapper {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* TITLE */
+.page-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+/* ===== TABS ===== */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.tab {
+    padding: 6px 14px;
+    background: #eef2f6;
+    border-radius: 16px;
+    font-size: 12px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    background: #dfe7ee;
+}
+
+.tab.active {
+    background: #2e7d32;
+    color: #ffffff;
+}
+
+/* ===== CARD ===== */
+.form-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 30px 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    min-height: 420px;
+}
+
+/* CARD HEADER */
+.form-header {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.icon {
+    width: 36px;
+    height: 36px;
+    background: #e6f4ea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.form-subtext {
+    font-size: 13px;
+    color: #666;
+}
+
+/* ===== FORM GRID ===== */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 28px;   /* MORE SPACE */
+    align-items: start;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+/* ===== LABELS ===== */
+label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #263238;
+}
+
+/* ===== INPUTS ===== */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 14px 16px;      /* INNER SPACE */
+    border-radius: 8px;
+    border: 1px solid #cfd8dc;
+    font-size: 14px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;       /* BIGGER BOX */
+}
+
+/* Date input fix */
+input[type="date"] {
+    height: 46px;
+}
+
+/* ===== INLINE OPTIONS ===== */
+.inline-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 24px;          /* SPACE BETWEEN CHECKBOXES */
+    margin: 6px 0 4px;
+}
+
+.inline-options label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.inline-options input[type="checkbox"],
+.inline-options input[type="radio"] {
+    width: 14px;
+    height: 14px;
+}
+
+/* ===== FOOTER BUTTONS ===== */
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+}
+
+.btn-prev {
+    background: #f0f0f0;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-next {
+    background: #2e7d32;
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+/* ===== AYUSH CHECKBOX SECTION FIX ===== */
+.ayush-therapy {
+    margin-top: 24px;
+}
+
+.ayush-therapy-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 60px;
+    margin: 16px 0 24px;
+}
+
+.ayush-therapy-options label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    cursor: pointer;
+}
+
+.ayush-therapy-options input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin-left: 12px;
+}
+
+/* space AFTER textarea */
+.ayush-therapy textarea {
+    margin-top: 14px;
+}
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #666565;
+    margin: 26px 0 14px;
+    padding-left: 10px;
+    border-left: 4px solid #2e7d32;
+}
+.section-subtitle {
+    font-size: 15px;
+    color: gray;
+}
+/* Inline checkbox alignment */
+.inline-options {
+    display: flex;
+    gap: 24px;
+    margin-top: 6px;
+}
+
+.inline-options label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+/* Title & subtitle spacing */
+.form-title {
+    margin-bottom: 4px;
+}
+
+.form-subtext {
+    margin-top: 0;
+    color: #7a7a7a;
+    font-size: 14px;
+}
+/* SCORING INFORMATION BOX */
+.score-box {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.score-box h3 {
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.score-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.score-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Dots */
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot.low {
+    background-color: #22c55e; /* green */
+}
+
+.dot.mild {
+    background-color: #eab308; /* yellow */
+}
+
+.dot.moderate {
+    background-color: #f97316; /* orange */
+}
+
+.dot.high {
+    background-color: #ef4444; /* red */
+}

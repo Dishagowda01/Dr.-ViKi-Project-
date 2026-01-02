@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Capture & Submit</title>
+<link rel="stylesheet" href="consult.css">
+
+<style>
+.image-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+@media(max-width:640px){
+  .image-grid{grid-template-columns:1fr;}
+}
+.capture-card{
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  padding:14px;
+  text-align:center;
+}
+.capture-card img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+  border-radius:8px;
+  background:#f3f4f6;
+  margin-bottom:10px;
+}
+.capture-card button{
+  width:100%;
+  margin-top:6px;
+  padding:8px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+.primary{background:#16a34a;color:#fff;}
+.secondary{background:#e5e7eb;}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+.modal-content{
+  background:#fff;
+  padding:16px;
+  border-radius:12px;
+  width:320px;
+}
+video{
+  width:100%;
+  border-radius:10px;
+  background:#000;
+}
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+.modal-actions button{
+  flex:1;
+  padding:8px;
+  border-radius:6px;
+  border:none;
+  font-weight:600;
+}
+.form-buttons{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+}
+.btn-prev,.btn-next{
+  padding:12px 24px;
+  border:none;
+  border-radius:6px;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-prev{background:#e5e7eb;}
+.btn-next{background:#16a34a;color:#fff;}
+</style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+  <div class="page-title">Patient Registration</div>
+
+  <div class="tabs">
+    <div class="tab active">Personal Information</div>
+    <div class="tab active">Lifestyle & Social History</div>
+    <div class="tab active">Medical History</div>
+    <div class="tab active">Current Health Status</div>
+    <div class="tab active">Psychometric Assessment</div>
+    <div class="tab active">AYUSH Profile</div>
+    <div class="tab active">Image Capture</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-title">Image Capture For AI Training</div>
+    <div class="form-subtext">Capture or upload clear images</div>
+
+    <div class="image-grid" id="grid"></div>
+
+    <div class="form-buttons">
+      <button class="btn-prev" onclick="go('consult6.html')">← Previous</button>
+      <button class="btn-next" onclick="submitImages()">Submit Registration →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAMERA MODAL -->
+<div class="modal" id="cameraModal">
+  <div class="modal-content">
+    <video id="video" autoplay playsinline></video>
+    <div class="modal-actions">
+      <button onclick="takePhoto()" class="primary">Capture</button>
+      <button onclick="closeCamera()" class="secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const sections = [
+  { id:"tongue", title:"Tongue" },
+  { id:"hands", title:"Hands" },
+  { id:"eyes", title:"Eyes" },
+  { id:"skin", title:"Skin" },
+  { id:"nails", title:"Nails" },
+  { id:"other", title:"Other Areas" }
+];
+
+const grid = document.getElementById("grid");
+let current = null;
+let stream = null;
+
+/* BUILD UI */
+sections.forEach(s=>{
+  grid.insertAdjacentHTML("beforeend",`
+    <div class="capture-card">
+      <img id="img-${s.id}">
+      <h4>${s.title}</h4>
+      <button class="primary" onclick="openCamera('${s.id}')">Capture Image</button>
+      <button class="secondary" onclick="triggerUpload('${s.id}')">Upload Image</button>
+      <input type="file" id="file-${s.id}" hidden accept="image/*">
+    </div>
+  `);
+});
+
+/* CAMERA */
+async function openCamera(id){
+  current = id;
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({ video:true });
+    video.srcObject = stream;
+    cameraModal.style.display = "flex";
+  }catch(err){
+    alert("Camera access denied");
+  }
+}
+
+function closeCamera(){
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
+    stream = null;
+  }
+  cameraModal.style.display = "none";
+}
+
+function takePhoto(){
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video,0,0);
+  document.getElementById(`img-${current}`).src =
+    canvas.toDataURL("image/jpeg",0.9);
+  closeCamera();
+}
+
+/* FILE UPLOAD */
+function triggerUpload(id){
+  const input = document.getElementById(`file-${id}`);
+  input.click();
+  input.onchange = ()=>{
+    if(!input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e=>{
+      document.getElementById(`img-${id}`).src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  };
+}
+
+/* SUBMIT */
+async function submitImages(){
+  const patientId = localStorage.getItem("patientId");
+  if(!patientId){
+    alert("Patient ID missing");
+    return;
+  }
+
+  const formData = new FormData();
+
+  sections.forEach(s=>{
+    const img = document.getElementById(`img-${s.id}`);
+    if(img.src && img.src.startsWith("data:image")){
+      const blob = dataURLtoBlob(img.src);
+      formData.append(s.id, blob, `${s.id}.jpg`);
+    }
+  });
+
+  if([...formData.keys()].length === 0){
+    alert("Please capture at least one image");
+    return;
+  }
+
+  try{
+    await fetch(`http://localhost:5000/api/patient/upload-images/${patientId}`,{
+      method:"POST",
+      body: formData
+    });
+
+    alert("Patient Registration Completed ✅");
+    sessionStorage.clear();
+    localStorage.clear();
+    location.href = "index2.html";
+
+  }catch(err){
+    console.error(err);
+    alert("Image upload failed");
+  }
+}
+
+/* HELPERS */
+function dataURLtoBlob(dataurl){
+  const arr = dataurl.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8 = new Uint8Array(n);
+  while(n--) u8[n] = bstr.charCodeAt(n);
+  return new Blob([u8], {type:mime});
+}
+
+function go(p){ location.href=p; }
+</script>
+
+</body>
+</html>

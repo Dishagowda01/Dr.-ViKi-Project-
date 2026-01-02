@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. ViKi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="index.css">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="container nav-container">
+    <img src="Images/clogo.png" alt="Logo" class="nav-logo">
+
+
+    <nav class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#features-wrapper">Solution</a>
+      <a href="#user-types">Features</a>
+      <a href="#footer">About</a>
+    </nav>
+
+    <div class="nav-buttons">
+      <a href="login.html" class="signin-btn">Sign In</a>
+
+      <details class="dropdown">
+        <summary class="getstarted-btn">
+          Get Started
+          <span class="arrow">▾</span>
+        </summary>
+
+        <div class="dropdown-card">
+          <a href="doctor_registration.html">As a Practitioner</a>
+         <a href="javascript:void(0);" id="seekingConsult" onclick="verifyOTP()">Seeking Consultation</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <div class="container hero-content">
+    <div class="tag">Revolutionizing Traditional Medicine</div>
+
+    <h1>Where Ancient Wisdom<br>Meets AI-Powered Care</h1>
+
+    <p>
+      Bringing AYUSH colleges, practitioners, and patients together — <br>
+      harnessing AI to preserve wisdom, personalize care, and power the <br>
+      future of holistic health.
+    </p>
+
+    <div class="hero-buttons">
+      <details class="dropdown">
+        <summary class="getstarted-btn">
+          Start Free Trial
+          <span class="arrow">▾</span>
+        </summary>
+
+        <div class="dropdown-card">
+          <a href="doctor_registration.html">As a Practitioner</a>
+         <a href="javascript:void(0);" id="seekingConsult" onclick="verifyOTP()">Seeking Consultation</a>
+        </div>
+      </details>
+
+     <a href="#" class="getstarted-btn watch-demo-btn">Watch Demo</a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section class="features-wrapper" id="features-wrapper">
+  <h3 class="features-title">Comprehensive AYUSH Solutions</h3>
+  <p class="features-sub">
+    Everything you need to digitize and enhance traditional medicine practices
+  </p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <h4><img src="Images/person.png" class="feature-icon"> Multi-User Platform</h4>
+      <p>Connects colleges, practitioners, and patients in one unified ecosystem.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><img src="Images/brain (1).png" class="feature-icon"> AI-Powered Analysis</h4>
+      <p>Advanced image recognition for body component analysis and diagnosis support.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><img src="Images/brain (2).png" class="feature-icon"> Secure Data Management</h4>
+      <p>HIPAA-compliant data collection and storage for sensitive medical information.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><img src="Images/brain (3).png" class="feature-icon"> Comprehensive Assessment</h4>
+      <p>Detailed patient registration with psychometric evaluation and health profiling.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><img src="Images/brain (4).png" class="feature-icon"> Traditional Medicine Focus</h4>
+      <p>Tools for Ayurveda, Yoga, Naturopathy, Unani, Siddha & Homeopathy.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><img src="Images/brain (5).png" class="feature-icon"> Patient-Practitioner Connect</h4>
+      <p>Seamless communication with mobile app support.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= USER TYPES ================= -->
+<section class="user-types" id="user-types">
+  <div class="container">
+    <h2>Tailored for Every User</h2>
+    <p>Specialized solutions for different stakeholders in the AYUSH ecosystem</p>
+
+    <div class="user-grid">
+      <div class="user-card">
+        <h3>For Colleges</h3>
+        <ul>
+          <li>Student data management</li>
+          <li>Clinical training records</li>
+          <li>Research data collection</li>
+          <li>Institutional analytics</li>
+        </ul>
+      </div>
+
+      <div class="user-card">
+        <h3>For Practitioners</h3>
+        <ul>
+          <li>Patient management system</li>
+          <li>AI-assisted diagnosis</li>
+          <li>Treatment planning tools</li>
+          <li>Practice analytics</li>
+        </ul>
+      </div>
+
+      <div class="user-card">
+        <h3>For Patients</h3>
+        <ul>
+          <li>Health profile management</li>
+          <li>Practitioner communication</li>
+          <li>Treatment tracking</li>
+          <li>Wellness insights</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta">
+  <div class="container">
+    <h2>Ready to Transform Your AYUSH Practice?</h2>
+    <p>Join thousands of practitioners and institutions already using our platform</p>
+
+    <div class="cta-buttons">
+      <details class="dropdown">
+        <summary class="getstarted-btn">
+          Start Free Trial
+          <span class="arrow">▾</span>
+        </summary>
+
+        <div class="dropdown-card">
+          <a href="doctor_registration.html">As a Practitioner</a>
+          <a href="javascript:void(0);" id="seekingConsult" onclick="verifyOTP()">Seeking Consultation</a>
+        </div>
+      </details>
+
+     <a href="#" class="getstarted-btn">Contact Sales</a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer" id="footer">
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <img src="Images/clogo.png" class="logo">
+      <p>Revolutionizing traditional medicine through technology and AI</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">API</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="#">Documentation</a>
+      <a href="#">Help Center</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+
+  <div class="copyright">
+    © 2024 Dr. ViKi. All rights reserved.
+  </div>
+</footer>
+
+<!-- ================= JS ================= -->
+<script>
+  document.addEventListener("click", function (event) {
+    document.querySelectorAll("details.dropdown").forEach(dropdown => {
+      if (!dropdown.contains(event.target)) {
+        dropdown.removeAttribute("open");
+      }
+    });
+  });
+  function verifyOTP() {
+  document.getElementById("otpModal").style.display = "flex";
+}
+let userPhone = "";
+
+function closeOTP() {
+  document.getElementById("otpModal").style.display = "none";
+}
+
+async function sendOTP() {
+  userPhone = document.getElementById("waNumber").value.trim();
+
+  if (!userPhone) {
+    alert("Please enter WhatsApp number");
+    return;
+  }
+
+  closeOTP();
+
+  try {
+    let sendOTP = await fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: userPhone })
+    });
+
+    let otpResult = await sendOTP.json();
+    if (!otpResult.success) return alert("Failed to send OTP!");
+
+    let otp = prompt("Enter the OTP received on WhatsApp:");
+
+    let verify = await fetch("/api/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: userPhone, otp })
+    });
+
+    let verifyResult = await verify.json();
+    if (!verifyResult.success) return alert("OTP verification failed!");
+
+    if (verifyResult.registered) {
+      window.location.href = "patient_dashboard.html";
+    } else {
+      window.location.href = "consult1.html";
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong.");
+  }
+}
+</script>
+<!-- ===== WhatsApp OTP Modal ===== -->
+<div class="otp-modal" id="otpModal">
+  <div class="otp-box">
+    <h3>WhatsApp Verification</h3>
+    <p>Enter your WhatsApp number to receive OTP</p>
+    <input type="tel" id="waNumber" placeholder="e.g. 91XXXXXXXXXX">
+    <div class="otp-actions">
+      <button class="otp-send" onclick="sendOTP()">Send OTP</button>
+      <button class="otp-cancel" onclick="closeOTP()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

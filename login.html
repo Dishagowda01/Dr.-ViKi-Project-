@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: #ffffff;
+      padding: 30px;
+      width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .role-label {
+      font-size: 13px;
+      margin-bottom: 5px;
+      display: block;
+      color: #555;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #019231;
+      border: none;
+      color: white;
+      font-size: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #076920;
+    }
+
+    .signup-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .signup-text a {
+      color: #019231;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .signup-text a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <h2>Login</h2>
+
+    <label class="role-label">Select Role</label>
+    <select id="role" onchange="toggleSignup()">
+      <option>Select Role</option>
+      <option value="user">User</option>
+      <option value="doctor">Doctor</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+
+    <button onclick="login()">Login</button>
+
+    <!-- Signup only for USER -->
+    <p class="signup-text" id="signupText">
+      Don’t have an account?
+      <a href="signup.html">Sign up</a>
+    </p>
+  </div>
+<script>
+function toggleSignup() {
+  const role = document.getElementById("role").value;
+  const signupText = document.getElementById("signupText");
+  signupText.classList.toggle("hidden", role === "doctor" || role === "admin");
+}
+
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const role = document.getElementById("role").value;
+
+  // validations
+  if (role === "Select Role") {
+    alert("Please select a role");
+    return;
+  }
+
+  if (!email || !password) {
+    alert("Please enter email and password");
+    return;
+  }
+
+  // API based on role
+  const url =
+    role === "admin"
+      ? "http://localhost:5000/api/admin/login"
+      : role === "doctor"
+      ? "http://localhost:5000/api/doctor/login"
+      : "http://localhost:5000/api/user/login";
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Login failed");
+      return;
+    }
+
+    // Save session info
+    localStorage.setItem("email", email);
+    localStorage.setItem("role", role);
+
+    // 🔁 Role-based redirect
+    if (role === "admin") {
+      window.location.href = "admin_dashboard.html";
+    } else if (role === "doctor") {
+      window.location.href = "doctordashboard.html";
+    } else {
+      window.location.href = "patient_dashboard.html";
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+}
+</script>
+
+
+</body>
+</html>

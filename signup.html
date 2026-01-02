@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.auth-card {
+    background: #fff;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+.auth-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+label {
+    margin-bottom: 5px;
+    display: block;
+}
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2e7d32;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover {
+    background: #256428;
+}
+.link {
+    text-align: center;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-card">
+    <h2>Create Account</h2>
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="Enter email">
+
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Create password">
+
+    <label>Confirm Password</label>
+    <input type="password" id="confirmPassword" placeholder="Confirm password">
+
+    <button onclick="signup()">Sign Up</button>
+
+    <div class="link">
+        Already have an account? <a href="login.html">Sign In</a>
+    </div>
+</div>
+
+<script>
+async function signup() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (!email || !password || !confirmPassword) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    try {
+        const res = await fetch("http://localhost:5000/api/user/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("Signup successful");
+            window.location.href = "login.html";
+        } else {
+            alert(data.message);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Server error");
+    }
+}
+</script>
+
+</body>
+</html>

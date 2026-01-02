@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", sans-serif;
+}
+
+body{
+  background:linear-gradient(180deg,#e9f5fb,#ffffff);
+}
+
+/* ================= HEADER ================= */
+.header{
+  height:60px;
+  padding:0 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  background:#0b7d85;
+  color:#fff;
+  padding:6px 18px;
+  border-radius:6px;
+  font-weight:600;
+}
+
+.header-icons{
+  display:flex;
+  gap:16px;
+}
+
+.header-icons img{
+  width:20px;
+}
+
+/* ================= LAYOUT ================= */
+.main{
+  display:flex;
+  padding:20px 40px;
+  gap:30px;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+  width:210px;
+  background:#ffffff;
+  border-radius:12px;
+  padding:18px 0;
+}
+
+.sidebar a{
+  display:block;
+  padding:12px 24px;
+  font-size:14px;
+  color:#333;
+  text-decoration:none;
+}
+
+.sidebar a.active{
+  background:#6f8f96;
+  color:#fff;
+}
+
+/* ================= CARD ================= */
+.card{
+  flex:1;
+  background:#ffffff;
+  border-radius:14px;
+  padding:25px 30px;
+}
+
+/* ================= TITLE ================= */
+.title{
+  font-size:16px;
+  font-weight:600;
+  margin-bottom:25px;
+}
+
+/* ================= GRID ================= */
+.grid{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:30px;
+}
+
+/* ================= LEFT ================= */
+.left{
+  text-align:center;
+}
+
+.avatar{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  border:1px solid #bbb;
+  margin:auto;
+}
+
+.btn-outline{
+  margin-top:8px;
+  padding:6px 12px;
+  font-size:12px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  background:#fff;
+}
+
+.section{
+  text-align:left;
+  margin-top:18px;
+}
+
+.section h4{
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.lang{
+  font-size:13px;
+  color:#555;
+}
+
+.small-btn{
+  margin-top:6px;
+  padding:5px 10px;
+  font-size:12px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  background:#fff;
+}
+
+/* ================= FORM ================= */
+.form-group{
+  margin-bottom:12px;
+}
+
+.form-group label{
+  font-size:12px;
+  display:block;
+  margin-bottom:4px;
+}
+
+.form-group input{
+  width:100%;
+  padding:7px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  font-size:13px;
+}
+
+/* ================= ROW ================= */
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+/* ================= CHECKBOX ================= */
+.checkbox{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  font-size:12px;
+}
+
+/* ================= BUTTON ================= */
+.btn{
+  margin-top:12px;
+  padding:7px 18px;
+  border:none;
+  border-radius:6px;
+  background:#6f8f96;
+  color:#fff;
+  font-size:12px;
+}
+
+/* ================= BANK ================= */
+.bank input{
+  margin-bottom:8px;
+}
+
+/* ================= RATE ================= */
+.rate{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.pref{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">Dr. ViKi</div>
+  <div class="header-icons">
+    <img src="bell.png">
+    <img src="user.png">
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="appointments.html">Appointments</a>
+  <a href="patients.html">Patients</a>
+  <a href="ai-reports.html">AI Reports</a>
+  <a href="consultations.html">Consultations</a>
+  <a href="treatments.html">Treatments</a>
+  <a href="revenue.html">Revenue</a>
+  <a href="messaging.html">Messaging</a>
+  <a href="doctorprofile.html" class="active">Profile</a>
+  <a href="settings.html">Settings</a>
+</div>
+
+
+  <!-- CONTENT -->
+  <div class="card">
+    <div class="title">Doctor profile</div>
+
+    <div class="grid">
+
+      <!-- LEFT -->
+      <div class="left">
+        <div class="avatar"></div>
+        <button class="btn-outline">Upload Photo</button>
+
+        <div class="section">
+          <h4>Languages</h4>
+          <div class="lang">English</div>
+          <div class="lang">Hindi</div>
+          <button class="small-btn">+ Add other languages</button>
+        </div>
+
+        <div class="section">
+          <h4>Upload certificate</h4>
+          <div class="lang">📄 BAMS certificate</div>
+          <div class="lang">📄 MD certificate</div>
+          <button class="btn-outline">Upload Certificate</button>
+        </div>
+
+        <div class="section bank">
+          <h4>Bank Details</h4>
+          <input placeholder="Bank Name">
+          <input placeholder="Account Number">
+          <input placeholder="IFSC Code">
+          <input placeholder="Account holder name">
+          <button class="btn">Update details</button>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="form-group"><label>Name</label><input></div>
+
+        <div class="row">
+          <div class="form-group"><label>Qualification</label><input></div>
+          <div class="form-group"><label>Phone</label><input></div>
+        </div>
+
+        <div class="row">
+          <div class="form-group"><label>Email</label><input></div>
+          <div class="form-group"><label>License ID</label><input></div>
+        </div>
+
+        <div class="form-group"><label>Clinic/Hospital</label><input></div>
+
+        <h4 style="font-size:13px;margin:10px 0">Specialization</h4>
+        <div class="checkbox">
+          <label><input type="checkbox"> Ayurveda</label>
+          <label><input type="checkbox"> PCOS</label>
+          <label><input type="checkbox"> Weight loss</label>
+          <label><input type="checkbox"> Mental Wellness</label>
+          <label><input type="checkbox"> Thyroid</label>
+          <label><input type="checkbox"> Hypertension</label>
+        </div>
+
+        <button class="btn">Save Changes</button>
+
+        <h4 style="font-size:13px;margin:18px 0 6px">Consultation Rates</h4>
+        <div class="rate"><span>Video consultation</span><span>30 min · ₹500</span></div>
+        <div class="rate"><span>Chat consultation</span><span>24 hrs · ₹400</span></div>
+        <div class="rate"><span>Phone call</span><span>20 min · ₹500</span></div>
+        <div class="rate"><span>In person</span><span>30 min · ₹400</span></div>
+
+        <button class="btn">Update rates</button>
+
+        <h4 style="font-size:13px;margin:18px 0 6px">Consultation Preferences</h4>
+        <div class="pref">
+          <label><input type="checkbox"> Video consultation</label>
+          <label><input type="checkbox"> In-person consultation</label>
+          <label><input type="checkbox"> Phone consultation</label>
+          <label><input type="checkbox"> Chat based consultation</label>
+        </div>
+
+        <button class="btn">Save changes</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

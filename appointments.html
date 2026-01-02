@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Appointments - Doctor Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", sans-serif;
+}
+
+body{
+  background:#eef6fb;
+}
+
+/* HEADER */
+.header{
+  padding:16px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.left-icons{
+  display:flex;
+  gap:14px;
+}
+
+.left-icons img{
+  width:26px;
+  cursor:pointer;
+}
+
+.right-logo img{
+  height:34px;
+}
+
+/* LAYOUT */
+.dashboard{
+  display:flex;
+  gap:20px;
+  padding:20px 30px;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  background:#fff;
+  border-radius:10px;
+  padding:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.sidebar ul{
+  list-style:none;
+}
+
+.sidebar a{
+  display:block;
+  padding:10px;
+  margin-bottom:6px;
+  text-decoration:none;
+  color:#333;
+  border-radius:6px;
+  font-size:14px;
+}
+
+.sidebar a.active,
+.sidebar a:hover{
+  background:#607d8b;
+  color:#fff;
+}
+
+/* MAIN */
+.main{
+  flex:1;
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.card h4{
+  margin-bottom:12px;
+}
+
+/* EMPTY STATE */
+.empty{
+  text-align:center;
+  padding:40px 10px;
+  color:#777;
+  font-size:14px;
+}
+
+/* TYPES */
+.types label{
+  display:block;
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+/* CALENDAR */
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+  margin-top:15px;
+  text-align:center;
+}
+
+.calendar-day{
+  padding:10px 0;
+  border-radius:50%;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.calendar-day.booked{
+  background:#0b7d85;
+  color:#fff;
+}
+
+.calendar-day.empty{
+  visibility:hidden;
+}
+
+.calendar-header{
+  font-weight:600;
+  font-size:13px;
+}
+
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .dashboard{
+    flex-direction:column;
+  }
+  .main{
+    grid-template-columns:1fr;
+  }
+  .sidebar{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="right-logo">
+    <img src="images/logo.jpeg" alt="Logo">
+  </div>
+
+  <div class="left-icons">
+    <a href="notifications.html">
+      <img src="images/bell.png" alt="Notifications">
+    </a>
+    <a href="doctorprofile.html">
+      <img src="images/profile.png" alt="Profile">
+    </a>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="doctordashboard.html">Dashboard</a></li>
+      <li><a href="appointments.html" class="active">Appointments</a></li>
+      <li><a href="patients.html">Patients</a></li>
+      <li><a href="aireports.html">AI Reports</a></li>
+      <li><a href="consultations.html">Consultations</a></li>
+      <li><a href="treatments.html">Treatments</a></li>
+      <li><a href="revenue.html">Revenue</a></li>
+      <li><a href="messaging.html">Messaging</a></li>
+      <li><a href="doctorprofile.html">Profile</a></li>
+      <li><a href="settings.html">Settings</a></li>
+    </ul>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- LEFT -->
+    <div>
+      <div class="card">
+        <h4>Upcoming Appointments</h4>
+        <div class="empty">
+          No appointments yet.<br>
+          Patient bookings will appear here.
+        </div>
+      </div>
+
+      <br>
+
+      <div class="card">
+        <h4>Past Appointments</h4>
+        <div class="empty">
+          No past appointments available.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="card types">
+        <h4>Appointment Types</h4>
+        <label><input type="checkbox" disabled> Online Video</label>
+        <label><input type="checkbox" disabled> Chat Based</label>
+        <label><input type="checkbox" disabled> Phone Call</label>
+        <label><input type="checkbox" disabled> In-Person</label>
+      </div>
+
+      <br>
+
+     <div class="card calendar">
+  <h4>Doctor's Calendar</h4>
+  <div id="calendar"></div>
+</div>
+
+    </div>
+
+  </div>
+</div>
+<script>
+  // 🔴 These dates will come from DB later
+  // For now EMPTY because no patient booked
+  const bookedDates = [
+    // "2025-05-10",
+    // "2025-05-12"
+  ];
+
+  const calendar = document.getElementById("calendar");
+
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  days.forEach(d=>{
+    const div=document.createElement("div");
+    div.className="calendar-header";
+    div.innerText=d;
+    calendar.appendChild(div);
+  });
+
+  const year = 2025;
+  const month = 4; // May (0-indexed)
+  const firstDay = new Date(year,month,1).getDay();
+  const startOffset = (firstDay + 6) % 7;
+  const totalDays = new Date(year,month+1,0).getDate();
+
+  calendar.classList.add("calendar-grid");
+
+  for(let i=0;i<startOffset;i++){
+    const empty=document.createElement("div");
+    empty.className="calendar-day empty";
+    calendar.appendChild(empty);
+  }
+
+  for(let day=1; day<=totalDays; day++){
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const div=document.createElement("div");
+    div.className="calendar-day";
+    div.innerText=day;
+
+    if(bookedDates.includes(dateStr)){
+      div.classList.add("booked");
+    }
+
+    calendar.appendChild(div);
+  }
+</script>
+
+
+</body>
+</html>

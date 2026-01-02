@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AYUSH Profile</title>
+<link rel="stylesheet" href="consult.css">
+
+<style>
+.section-title { font-weight:600; margin:20px 0 8px; }
+.grid-1, .grid-3 { display:grid; gap:16px; margin-bottom:16px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+textarea, input[type="number"] {
+  width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;
+}
+.checkbox-group label {
+  display:inline-flex; align-items:center; gap:6px;
+  margin-right:16px; margin-bottom:6px; cursor:pointer;
+}
+.form-buttons{ display:flex; justify-content:space-between; margin-top:20px; }
+.btn-prev,.btn-next{
+  padding:12px 24px; border:none; border-radius:6px;
+  font-weight:600; cursor:pointer;
+}
+.btn-prev{ background:#e5e7eb; }
+.btn-next{ background:#16a34a; color:#fff; }
+.btn-next:hover{ background:#15803d; }
+.therapy-list {
+  margin: 8px 0 16px;
+  padding-left: 20px;
+}
+
+.therapy-list li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+#therapyDetails {
+  min-height: 120px;
+}
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+
+</style>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <div class="page-title">Patient Registration</div>
+
+  <div class="tabs">
+    <div class="tab active">Personal Information</div>
+    <div class="tab active">Lifestyle & Social History</div>
+    <div class="tab active">Medical History</div>
+    <div class="tab active">Current Health Status</div>
+    <div class="tab active">Psychometric Assessment</div>
+    <div class="tab active">AYUSH Profile</div>
+    <div class="tab">Image Capture</div>
+  </div>
+
+  <div class="form-card">
+    <h3>AYUSH Profile</h3>
+    <p class="subtitle">Please fill out the details below</p>
+    <!-- New AYUSH Assessment Questions -->
+<div class="section-title">AYUSH Assessment</div>
+
+<div class="grid-1">
+
+  <!-- Q1 Body build -->
+  <label for="bodyBuild">Body build</label>
+  <select id="bodyBuild">
+    <option value="">Select</option>
+    <option value="weakly">Weakly developed with thin musculature</option>
+    <option value="moderate">Moderately developed with soft and loosely knitted musculature</option>
+    <option value="well">Well developed with firmly knitted musculature</option>
+  </select>
+
+  <!-- Q3 Nail colour & Size -->
+  <label for="nail">Nail colour & Size</label>
+  <select id="nail">
+    <option value="">Select</option>
+    <option value="reddish">Reddish, Small</option>
+    <option value="pale">Pale, Medium</option>
+    <option value="pink">Pink, Large</option>
+  </select>
+
+  <!-- Q5 Scalp hair is prone to -->
+  <label for="scalpHair">Scalp hair is prone to</label>
+  <select id="scalpHair">
+    <option value="">Select</option>
+    <option value="graying">Graying</option>
+    <option value="falling">Falling</option>
+    <option value="breaking">Breaking</option>
+    <option value="split">Split at ends</option>
+    <option value="none">None</option>
+  </select>
+
+  <!-- Q6 Do you observe any of these -->
+  <label for="observe">Do you observe any of these</label>
+  <select id="observe">
+    <option value="">Select</option>
+    <option value="nails">Nails</option>
+    <option value="palm">Palm</option>
+    <option value="sole">Sole</option>
+    <option value="lips">Lips</option>
+  </select>
+
+  <!-- Q7 Appetite -->
+  <label for="appetite">Appetite</label>
+  <select id="appetite">
+    <option value="">Select</option>
+    <option value="regular">Regular, Frequent</option>
+    <option value="irregularInfrequent">Irregular, Infrequent</option>
+    <option value="irregularFrequent">Irregular, Frequent</option>
+  </select>
+
+  <!-- Q8 Body Temperature -->
+  <label for="bodyTemp">Body Temperature</label>
+  <select id="bodyTemp">
+    <option value="">Select</option>
+    <option value="higher">Higher compared to others</option>
+    <option value="lower">Lower compared to others</option>
+    <option value="average">Average</option>
+    <option value="variable">Variable</option>
+  </select>
+
+  <!-- Q9 Sleep -->
+  <label for="sleep">Sleep</label>
+  <select id="sleep">
+    <option value="">Select</option>
+    <option value="heavy">Immediately get sleep, Heavy sleep</option>
+    <option value="moderate">After few minutes/reading, moderate sleep</option>
+    <option value="less">It takes long time to sleep, less sleep</option>
+  </select>
+
+  <!-- Q10 Bowel habits -->
+  <label for="bowel">Bowel habits</label>
+  <select id="bowel">
+    <option value="">Select</option>
+    <option value="regular">Regular</option>
+    <option value="irregular">Irregular</option>
+    <option value="occasionally">Occasionally irregular</option>
+  </select>
+
+  <!-- Q11 Body weight changes -->
+  <label for="bodyWeight">Body weight changes</label>
+  <select id="bodyWeight">
+    <option value="">Select</option>
+    <option value="gainLooseEasy">Gain weight easily and lose easily</option>
+    <option value="difficultyGain">Difficulty in gaining weight</option>
+    <option value="gainLooseDifficult">Gain and lose with difficulty</option>
+  </select>
+
+  <!-- Q12 Speech -->
+  <label for="speech">Speech</label>
+  <select id="speech">
+    <option value="">Select</option>
+    <option value="excessive">Excessive, Fast</option>
+    <option value="moderate">Moderate, Medium</option>
+    <option value="less">Less, Slow</option>
+  </select>
+
+  <!-- Q13 Quality of voice -->
+  <label for="voice">Quality of voice</label>
+  <select id="voice">
+    <option value="">Select</option>
+    <option value="low">Low, weak, feeble</option>
+    <option value="broken">Broken, rough, deep</option>
+    <option value="good">Good tone, pleasing, clear</option>
+    <option value="high">High pitched, loud, sharp</option>
+  </select>
+
+  <!-- Q14 Voluntary and involuntary movements -->
+  <label for="movements">Voluntary and involuntary movements</label>
+  <select id="movements">
+    <option value="">Select</option>
+    <option value="hand">Hand movement</option>
+    <option value="leg">Leg movements</option>
+    <option value="eyebrow">Eyebrow</option>
+    <option value="shoulder">Shoulder</option>
+    <option value="overall">Overall</option>
+  </select>
+
+  <!-- Q15 Mental strength -->
+  <label for="mentalStrength">Mental strength</label>
+  <select id="mentalStrength">
+    <option value="">Select</option>
+    <option value="counselled">Get stressed/disturbed frequently and can be counselled by others</option>
+    <option value="overcomeTime">Get stressed/disturbed easily and overcome it by own / with some time</option>
+    <option value="overcomeOwn">Get stressed with difficulty and can overcome on own</option>
+    <option value="cannotCounsel">Get stressed easily and cannot be counseled easily by others</option>
+  </select>
+
+  <!-- Q16 How quickly can memorize -->
+  <label for="memorize">How quickly you can memorize things?</label>
+  <select id="memorize">
+    <option value="">Select</option>
+    <option value="quickly">Quickly</option>
+    <option value="moderately">Moderately</option>
+    <option value="slowly">Slowly</option>
+  </select>
+
+  <!-- Q17 Retention power -->
+  <label for="retention">How good is your retention power?</label>
+  <select id="retention">
+    <option value="">Select</option>
+    <option value="good">Good</option>
+    <option value="medium">Medium</option>
+    <option value="poor">Poor</option>
+  </select>
+
+  <!-- Q18 Do you like to -->
+  <label for="interaction">Do you like to</label>
+  <select id="interaction">
+    <option value="">Select</option>
+    <option value="moveInteract">Move around and interact with people and explore</option>
+    <option value="seated">Be seated and keep confined to own work</option>
+    <option value="moderate">Move around moderately and not sit for very long hours</option>
+  </select>
+
+</div>
+
+
+
+    <!-- Current Alternative Therapy Usage -->
+<div class="section-title">Current Alternative Therapy Usage</div>
+
+<ul class="therapy-list">
+  <li>Yoga</li>
+  <li>Meditation</li>
+  <li>Ayurveda</li>
+  <li>Homeopathy</li>
+  <li>Naturopathy</li>
+  <li>Unani</li>
+  <li>Siddha</li>
+</ul>
+
+<div class="grid-1">
+  <textarea
+    id="therapyDetails"
+    rows="4"
+    placeholder="Please specify details about current therapies and their effectiveness"></textarea>
+
+</div>
+
+
+
+    <!-- Buttons -->
+    <div class="form-buttons">
+      <button type="button" class="btn-prev" id="prevBtn">← Previous</button>
+      <button type="button" class="btn-next" id="nextBtn">Save & Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "http://localhost:5000/api/patients";
+function go(p){ location.href=p; }
+
+/* Elements */
+const vata = document.getElementById("vata");
+const pitta = document.getElementById("pitta");
+const kapha = document.getElementById("kapha");
+const nadi = document.getElementById("nadi");
+const tongue = document.getElementById("tongue");
+const eye = document.getElementById("eye");
+const skin = document.getElementById("skin");
+const yoga = document.getElementById("yoga");
+const meditation = document.getElementById("meditation");
+const ayurveda = document.getElementById("ayurveda");
+const homeopathy = document.getElementById("homeopathy");
+const naturopathy = document.getElementById("naturopathy");
+const unani = document.getElementById("unani");
+const siddha = document.getElementById("siddha");
+const therapyDetails = document.getElementById("therapyDetails");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+/* LOAD STEP 6 */
+window.onload = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if(!patientId) return;
+
+  try {
+    const res = await fetch(`${API}/${patientId}`);
+    if(!res.ok) return;
+
+    const data = await res.json();
+    const a = data.step6;
+    if(!a) return;
+
+    vata.value = a.prakriti?.vata ?? "";
+    pitta.value = a.prakriti?.pitta ?? "";
+    kapha.value = a.prakriti?.kapha ?? "";
+
+    nadi.value = a.nadiPariksha ?? "";
+    tongue.value = a.physicalObservations?.tongue ?? "";
+    eye.value = a.physicalObservations?.eye ?? "";
+    skin.value = a.physicalObservations?.skin ?? "";
+
+    yoga.checked = a.therapies?.yoga ?? false;
+    meditation.checked = a.therapies?.meditation ?? false;
+    ayurveda.checked = a.therapies?.ayurveda ?? false;
+    homeopathy.checked = a.therapies?.homeopathy ?? false;
+    naturopathy.checked = a.therapies?.naturopathy ?? false;
+    unani.checked = a.therapies?.unani ?? false;
+    siddha.checked = a.therapies?.siddha ?? false;
+    therapyDetails.value = a.therapies?.details ?? "";
+
+  } catch (err) {
+    console.error("Load error:", err);
+  }
+};
+
+/* SAVE STEP 6 */
+nextBtn.onclick = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if(!patientId){ alert("Patient missing"); return; }
+
+  const step6 = {
+    prakriti: {
+      vata: vata.value ? Number(vata.value) : null,
+      pitta: pitta.value ? Number(pitta.value) : null,
+      kapha: kapha.value ? Number(kapha.value) : null
+    },
+    nadiPariksha: nadi.value,
+    physicalObservations: {
+      tongue: tongue.value,
+      eye: eye.value,
+      skin: skin.value
+    },
+    therapies: {
+      yoga: yoga.checked,
+      meditation: meditation.checked,
+      ayurveda: ayurveda.checked,
+      homeopathy: homeopathy.checked,
+      naturopathy: naturopathy.checked,
+      unani: unani.checked,
+      siddha: siddha.checked,
+      details: therapyDetails.value
+    }
+  };
+
+  try {
+    const res = await fetch(`${API}/${patientId}/step6`, {
+      method:"PUT",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ step6 })
+    });
+
+    if(!res.ok) throw new Error();
+    go("consult7.html");
+
+  } catch (err) {
+    alert("Failed to save AYUSH profile");
+  }
+};
+
+/* PREVIOUS */
+prevBtn.onclick = ()=> go("consult5.html");
+</script>
+
+
+</body>
+</html>

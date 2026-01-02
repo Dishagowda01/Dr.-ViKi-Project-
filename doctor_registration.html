@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Practitioner Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #e0f2fe, #f0fdf4);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: #ffffff;
+  width: 100%;
+  max-width: 850px;
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+h2 {
+  text-align: center;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+/* Section title */
+.section-title {
+  margin: 26px 0 14px;
+  font-weight: 600;
+  color: #065f46;
+  border-left: 4px solid #22c55e;
+  padding-left: 10px;
+}
+
+/* Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 14px;
+  color: #334155;
+  margin-bottom: 6px;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+/* OTP */
+.otp-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.otp-row button {
+  padding: 11px 18px;
+  background: #149744;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.otp-row button:hover {
+  background: #15803d;
+}
+
+/* DOCUMENTS */
+.documents-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.document-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.document-info h4 {
+  margin: 0;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.document-info p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.doc-btn {
+  padding: 9px 18px;
+  background: #13a147;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.doc-btn:hover {
+  background: #16a34a;
+}
+
+/* Submit */
+.submit-btn {
+  width: 100%;
+  margin-top: 32px;
+  padding: 15px;
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  box-shadow: 0 10px 24px rgba(34, 197, 94, 0.45);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .otp-row {
+    flex-direction: column;
+  }
+
+  .document-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .doc-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Practitioner Registration</h2>
+  <p class="subtitle">Join Dr.ViKi platform as a certified AYUSH practitioner</p>
+
+  <form id="registrationForm" enctype="multipart/form-data">
+
+    <div class="section-title">Account Details</div>
+    <div class="form-grid">
+      <div class="full-width">
+        <label>Email</label>
+        <input type="email" name="email" required>
+      </div>
+    </div>
+
+    <div class="section-title">Personal Details</div>
+    <div class="form-grid">
+      <div>
+        <label>First Name</label>
+        <input type="text" name="firstName" required>
+      </div>
+      <div>
+        <label>Last Name</label>
+        <input type="text" name="lastName" required>
+      </div>
+      <div>
+        <label>Date of Birth</label>
+        <input type="date" name="dateOfBirth" required>
+      </div>
+      <div>
+        <label>Pin Code</label>
+        <input type="text" name="pinCode" required>
+      </div>
+
+      <div class="full-width otp-row">
+        <div style="flex:1">
+          <label>WhatsApp Number</label>
+          <input type="text" name="whatsappNumber">
+        </div>
+        <button type="button" id="sendOtpBtn">Send OTP</button>
+      </div>
+    </div>
+
+    <div class="section-title">Documents</div>
+
+    <div class="documents-wrapper">
+      <div class="document-row">
+        <div class="document-info">
+          <h4>Degree Certificates</h4>
+          <p>Upload PDF files (multiple allowed)</p>
+        </div>
+        <input type="file" id="degreeFile" name="degreeCertificates" multiple accept=".pdf" hidden>
+        <label for="degreeFile" class="doc-btn">Upload PDF</label>
+      </div>
+
+      <div class="document-row">
+        <div class="document-info">
+          <h4>Professional Photo</h4>
+          <p>JPG or PNG format</p>
+        </div>
+        <input type="file" id="photoFile" name="professionalPhoto" accept=".jpg,.jpeg,.png" hidden>
+        <label for="photoFile" class="doc-btn">Upload Photo</label>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">Complete Registration</button>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById("registrationForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+
+  try {
+    const res = await fetch("http://localhost:5000/api/doctor/register", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Registration failed");
+      return;
+    }
+
+    alert("Registration successful. Please wait for approval.");
+    form.reset();
+
+  } catch (err) {
+    alert("Server error. Try again later.");
+  }
+});
+
+document.getElementById("sendOtpBtn").addEventListener("click", async () => {
+  const whatsappNumber = document.querySelector('[name="whatsappNumber"]').value.trim();
+  if (!whatsappNumber) return alert("Enter WhatsApp number first.");
+
+  try {
+    const res = await fetch("http://localhost:5000/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ whatsappNumber })
+    });
+
+    if (res.ok) alert("OTP sent successfully");
+    else alert("OTP failed");
+  } catch {
+    alert("Server error");
+  }
+});
+</script>
+
+</body>
+</html>

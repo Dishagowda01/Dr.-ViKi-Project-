@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Registration - Personal Information</title>
+<link rel="stylesheet" href="consult.css">
+
+<style>
+.form-buttons{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+}
+.btn-prev{
+  padding:12px 24px;
+  background:#e5e7eb;
+  border:none;
+  border-radius:6px;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-next{
+  padding:12px 24px;
+  background:#16a34a;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  font-weight:600;
+  cursor:pointer;
+}
+.error{
+  color:red;
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <div class="page-title">Patient Registration</div>
+
+  <div class="tabs">
+    <div class="tab active">Personal Information</div>
+    <div class="tab">Lifestyle & Social History</div>
+    <div class="tab">Medical History</div>
+    <div class="tab">Current Health Status</div>
+    <div class="tab">Psychometric Assessment</div>
+    <div class="tab">AYUSH Profile</div>
+    <div class="tab">Image Capture</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-title">Personal Information</div>
+    <div class="form-subtext">Please fill out all required fields</div>
+
+    <div class="form-grid">
+
+      <div>
+        <label>Full Name *</label>
+        <input id="fullName">
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <label>Date of Birth *</label>
+        <input type="date" id="dob">
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <label>Gender *</label>
+        <select id="gender">
+          <option value="">Select</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Others</option>
+          <option>Prefer not to say</option>
+        </select>
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <label>Marital Status *</label>
+        <select id="maritalStatus">
+          <option value="">Select</option>
+          <option>Single</option>
+          <option>Married</option>
+          <option>Divorced</option>
+          <option>Widowed</option>
+        </select>
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <label>Occupation *</label>
+        <input id="occupation">
+        <small class="error"></small>
+      </div>
+
+      <div>
+        <label>Education *</label>
+        <select id="education">
+          <option value="">Select</option>
+          <option>High School</option>
+          <option>Bachelor</option>
+          <option>Master</option>
+          <option>Doctorate</option>
+        </select>
+        <small class="error"></small>
+      </div>
+
+      <div class="full-width">
+        <label>Phone *</label>
+        <input id="phone">
+        <small class="error"></small>
+      </div>
+
+      <div class="full-width">
+        <label>Email *</label>
+        <input type="email" id="email">
+        <small class="error"></small>
+      </div>
+
+      <div class="full-width">
+        <label>Address *</label>
+        <input id="address">
+        <small class="error"></small>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="form-buttons">
+    <button type="button" class="btn-prev" onclick="location.href='index.html'">
+      ← Previous
+    </button>
+    <button type="button" class="btn-next" onclick="submitStep1()">
+      Save & Next →
+    </button>
+  </div>
+
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api/patients";
+
+/* ================= VALIDATION ================= */
+function validate(){
+  let ok = true;
+  document.querySelectorAll(".error").forEach(e => e.textContent = "");
+
+  [
+    "fullName","dob","gender","maritalStatus",
+    "occupation","education","phone","email","address"
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value) {
+      el.nextElementSibling.textContent = "Required";
+      ok = false;
+    }
+  });
+  return ok;
+}
+
+/* ================= LOAD STEP 1 ================= */
+window.onload = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}`);
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (!data.step1) return;
+
+    Object.entries(data.step1).forEach(([key,value])=>{
+      const el = document.getElementById(key);
+      if (el) el.value = value ?? "";
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+/* ================= SAVE STEP 1 ================= */
+async function submitStep1(){
+  if (!validate()) return;
+
+  const step1 = {
+    fullName: fullName.value,
+    dob: dob.value,
+    gender: gender.value,
+    maritalStatus: maritalStatus.value,
+    occupation: occupation.value,
+    education: education.value,
+    phone: phone.value,
+    email: email.value,
+    address: address.value
+  };
+
+  let patientId = localStorage.getItem("patientId");
+
+  try {
+    let res;
+
+    if (!patientId) {
+      // CREATE PATIENT
+      res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ step1 })
+      });
+
+      if (!res.ok) throw new Error("Create failed");
+      const data = await res.json();
+      localStorage.setItem("patientId", data.patientId);
+
+    } else {
+      // UPDATE STEP 1
+      res = await fetch(`${API_BASE}/${patientId}/step1`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ step1 })
+      });
+
+      if (!res.ok) throw new Error("Update failed");
+    }
+
+    location.href = "consult2.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error. Please try again.");
+  }
+}
+</script>
+
+</body>
+</html>

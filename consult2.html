@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lifestyle & Social History</title>
+<link rel="stylesheet" href="consult.css">
+<style>
+.form-buttons{display:flex;justify-content:space-between;margin-top:24px;}
+.btn-prev{padding:12px 24px;background:#e5e7eb;border:none;border-radius:6px;font-weight:600;cursor:pointer;}
+.btn-next{padding:12px 24px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;}
+.inline-options label{margin-right:20px;font-size:14px;}
+.hidden{display:none;}
+.section-title{grid-column:1/-1;font-weight:600;margin-top:14px;}
+.error{color:red;font-size:12px;}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+<div class="page-title">Patient Registration</div>
+
+<div class="tabs">
+  <div class="tab">Personal Information</div>
+  <div class="tab active">Lifestyle & Social History</div>
+  <div class="tab">Medical History</div>
+  <div class="tab">Current Health Status</div>
+  <div class="tab">Psychometric Assessment</div>
+  <div class="tab">AYUSH Profile</div>
+  <div class="tab">Image Capture</div>
+</div>
+
+<div class="form-card">
+<div class="form-title">Lifestyle & Social History</div>
+<div class="form-subtext">Please fill required fields</div>
+
+<div class="form-grid">
+<!-- Smoking -->
+<div class="full">
+  <label>Smoking / Tobacco Use *</label>
+  <div class="inline-options">
+    <label><input type="radio" name="smoking" value="Yes"> Yes</label>
+    <label><input type="radio" name="smoking" value="No"> No</label>
+  </div>
+  <small class="error"></small>
+</div>
+
+<div class="full hidden" id="smokingDetails">
+  <input id="smokingFrequency" placeholder="Specify frequency">
+</div>
+
+<div class="full hidden" id="smokingDurationBox">
+  <input id="smokingDuration" placeholder="Specify duration">
+</div>
+
+<!-- Addiction -->
+<div class="full">
+  <label>Addiction</label>
+  <div class="inline-options">
+    <label><input type="checkbox" class="addiction" value="Tea"> Tea</label>
+    <label><input type="checkbox" class="addiction" value="Coffee"> Coffee</label>
+    <label><input type="checkbox" class="addiction" value="Others"> Others</label>
+  </div>
+</div>
+
+<div class="full">
+  <input id="addictionDetails" placeholder="Specify details">
+</div>
+
+<!-- Alcohol -->
+<div class="section-title">Alcohol</div>
+<div>
+  <label>Type</label>
+  <select id="alcoholType">
+    <option value="">Select</option>
+    <option>None</option>
+    <option>Beer</option>
+    <option>Wine</option>
+    <option>Spirits</option>
+  </select>
+</div>
+
+<div>
+  <label>Frequency</label>
+  <select id="alcoholFrequency">
+    <option value="">Select</option>
+    <option>Never</option>
+    <option>Occasionally</option>
+    <option>Weekly</option>
+    <option>Daily</option>
+  </select>
+</div>
+
+<!-- Exercise -->
+<div class="section-title">Exercise</div>
+<div>
+  <input id="exerciseType" placeholder="Type">
+</div>
+
+<div>
+  <select id="exerciseFrequency">
+    <option value="">Frequency</option>
+    <option>Never</option>
+    <option>Weekly</option>
+    <option>Daily</option>
+  </select>
+</div>
+
+<div>
+  <input id="exerciseDuration" placeholder="Duration">
+</div>
+
+<!-- Sleep -->
+<div class="section-title">Sleep</div>
+<div>
+  <select id="sleepHours">
+    <option value="">Hours</option>
+    <option>4–6</option>
+    <option>6–8</option>
+    <option>8+</option>
+  </select>
+</div>
+
+<div>
+  <select id="sleepQuality">
+    <option value="">Quality</option>
+    <option>Poor</option>
+    <option>Good</option>
+    <option>Excellent</option>
+  </select>
+</div>
+
+</div>
+
+<div class="form-buttons">
+  <button class="btn-prev" onclick="location.href='consult1.html'">← Previous</button>
+  <button class="btn-next" onclick="saveStep2()">Save & Next →</button>
+</div>
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api/patients";
+
+/* SHOW / HIDE SMOKING DETAILS */
+document.querySelectorAll('input[name="smoking"]').forEach(r=>{
+  r.addEventListener("change",()=>{
+    const yes = r.value==="Yes" && r.checked;
+    document.getElementById("smokingDetails").classList.toggle("hidden", !yes);
+    document.getElementById("smokingDurationBox").classList.toggle("hidden", !yes);
+  });
+});
+
+/* LOAD STEP 2 */
+window.onload = async () => {
+  const patientId = localStorage.getItem("patientId");
+  if (!patientId) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/${patientId}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.step2) return;
+    const s = data.step2;
+
+    if (s.smoking) {
+      const radio = document.querySelector(`input[name="smoking"][value="${s.smoking}"]`);
+      if(radio) radio.checked = true;
+      if(s.smoking==="Yes"){
+        document.getElementById("smokingDetails").classList.remove("hidden");
+        document.getElementById("smokingDurationBox").classList.remove("hidden");
+      }
+    }
+
+    smokingFrequency.value = s.smokingFrequency || "";
+    smokingDuration.value = s.smokingDuration || "";
+    (s.addiction||[]).forEach(v=>{
+      document.querySelectorAll(".addiction").forEach(c=>{
+        if(c.value===v) c.checked=true;
+      });
+    });
+    addictionDetails.value = s.addictionDetails || "";
+    alcoholType.value = s.alcoholType || "";
+    alcoholFrequency.value = s.alcoholFrequency || "";
+    exerciseType.value = s.exerciseType || "";
+    exerciseFrequency.value = s.exerciseFrequency || "";
+    exerciseDuration.value = s.exerciseDuration || "";
+    sleepHours.value = s.sleepHours || "";
+    sleepQuality.value = s.sleepQuality || "";
+  } catch(err){
+    console.error("Load error", err);
+  }
+};
+
+/* SAVE STEP 2 */
+async function saveStep2(){
+  const patientId = localStorage.getItem("patientId");
+  if(!patientId){ alert("Patient not found."); return; }
+
+  const step2 = {
+    smoking: document.querySelector('input[name="smoking"]:checked')?.value || "",
+    smokingFrequency: smokingFrequency.value,
+    smokingDuration: smokingDuration.value,
+    addiction: Array.from(document.querySelectorAll(".addiction:checked")).map(i=>i.value),
+    addictionDetails: addictionDetails.value,
+    alcoholType: alcoholType.value,
+    alcoholFrequency: alcoholFrequency.value,
+    exerciseType: exerciseType.value,
+    exerciseFrequency: exerciseFrequency.value,
+    exerciseDuration: exerciseDuration.value,
+    sleepHours: sleepHours.value,
+    sleepQuality: sleepQuality.value
+  };
+
+  try{
+    const res = await fetch(`${API_BASE}/${patientId}/step2`,{
+      method:"PUT",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ step2 })
+    });
+    if(!res.ok) throw new Error("Failed to save step2");
+    location.href="consult3.html";
+  } catch(err){
+    alert("Server error");
+    console.error(err);
+  }
+}
+</script>
+</body>
+</html>
